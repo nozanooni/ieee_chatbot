@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ieee-kau-chatbot
+    runtime: python
+    buildCommand: pip install uv && uv pip install -r requirements.txt --system && python ingest.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false   # you'll paste this manually in Render dashboard
+    disk:
+      name: vector-store
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1       # free, more than enough

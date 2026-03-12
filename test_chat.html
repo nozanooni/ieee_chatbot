@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IEEE KAU Chatbot — Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #0a0f2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .chat-container {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      height: 620px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(135deg, #1a3a8f, #0066cc);
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-header img {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: white;
+      padding: 4px;
+    }
+    .chat-header div h3 { font-size: 15px; font-weight: 700; }
+    .chat-header div p { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f5f7ff;
+    }
+    .message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+    .message.bot {
+      background: white;
+      color: #1a1a2e;
+      align-self: flex-start;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .message.user {
+      background: #1a3a8f;
+      color: white;
+      align-self: flex-end;
+      border-bottom-left-radius: 4px;
+    }
+    .typing {
+      display: flex; gap: 4px; align-items: center;
+      padding: 10px 14px;
+      background: white;
+      border-radius: 14px;
+      align-self: flex-start;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .typing span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #1a3a8f;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+    .input-area {
+      padding: 14px 16px;
+      background: white;
+      border-top: 1px solid #e8ecf8;
+      display: flex;
+      gap: 10px;
+    }
+    .input-area input {
+      flex: 1;
+      border: 2px solid #e0e6f8;
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      direction: rtl;
+      transition: border-color 0.2s;
+    }
+    .input-area input:focus { border-color: #1a3a8f; }
+    .input-area button {
+      background: #1a3a8f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 42px; height: 42px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .input-area button:hover { background: #0d2a6e; }
+    .input-area button:disabled { background: #aab4d4; cursor: not-allowed; }
+    .api-url-bar {
+      background: #eef2ff;
+      padding: 8px 16px;
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      border-bottom: 1px solid #dde3f5;
+    }
+    .api-url-bar input {
+      border: 1px solid #c5cdf0;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      width: 220px;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="chat-container">
+  <div class="chat-header">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+      <circle cx="19" cy="19" r="19" fill="white"/>
+      <text x="19" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a3a8f">IEEE</text>
+    </svg>
+    <div>
+      <h3>مساعدة نادي IEEE KAU</h3>
+      <p>متاحة للإجابة على استفساراتك</p>
+    </div>
+  </div>
+
+  <div class="api-url-bar">
+    رابط الـ API:
+    <input type="text" id="apiUrl" value="http://localhost:8000" placeholder="https://your-app.onrender.com"/>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="message bot">
+      أهلاً وسهلاً! 👋 أنا مساعدة نادي IEEE في جامعة الملك عبدالعزيز. كيف يمكنني مساعدتك اليوم؟
+    </div>
+  </div>
+
+  <div class="input-area">
+    <button id="sendBtn" onclick="sendMessage()">➤</button>
+    <input
+      type="text"
+      id="userInput"
+      placeholder="اكتبي سؤالك هنا..."
+      onkeydown="if(event.key==='Enter') sendMessage()"
+    />
+  </div>
+</div>
+
+<script>
+  const history = [];
+
+  async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const btn = document.getElementById('sendBtn');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    appendMessage(msg, 'user');
+    input.value = '';
+    btn.disabled = true;
+
+    const typing = appendTyping();
+
+    history.push({ role: 'user', content: msg });
+
+    try {
+      const apiUrl = document.getElementById('apiUrl').value.trim().replace(/\/$/, '');
+      const res = await fetch(`${apiUrl}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, conversation_history: history.slice(-6) })
+      });
+      const data = await res.json();
+      typing.remove();
+      appendMessage(data.response, 'bot');
+      history.push({ role: 'assistant', content: data.response });
+    } catch (err) {
+      typing.remove();
+      appendMessage('عذراً، حدث خطأ في الاتصال. تأكدي أن الـ API يعمل على الرابط المذكور أعلاه.', 'bot');
+    }
+
+    btn.disabled = false;
+    input.focus();
+  }
+
+  function appendMessage(text, role) {
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.textContent = text;
+    const container = document.getElementById('messages');
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div;
+  }
+
+  function appendTyping() {
+    const div = document.createElement('div');
+    div.className = 'typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    const container = document.getElementById('messages');
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div;
+  }
+</script>
+</body>
+</html>
