@@ -4,52 +4,37 @@ import re
 import requests
 import numpy as np
 from pathlib import Path
-import pdfplumber
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
-
-embedder = SentenceTransformer("intfloat/multilingual-e5-small")
-
 
 load_dotenv()
 
-PDF_PATH = "data/ieee_kau.pdf"
 EXTRA_DOCS_DIR = "data/extra_docs/"
 VECTOR_STORE_PATH = "data/vector_store.pkl"
-CHUNK_SIZE = 400
+CHUNK_SIZE = 500
 CHUNK_OVERLAP = 80
 
-def get_embedding(text: str):
-    return embedder.encode(
-        f"passage: {text}",
-        normalize_embeddings=True
+def get_embedding(text: str) -> list:
+    response = requests.post(
+        "https://api.jina.ai/v1/embeddings",
+        headers={"Authorization": f"Bearer {os.environ.get('JINA_API_KEY')}", "Content-Type": "application/json"},
+        json={"model": "jina-embeddings-v3", "input": [text]}
     )
-
-
-def extract_pdf_text(pdf_path: str) -> str:
-    text = ""
-    with pdfplumber.open(pdf_path) as pdf:
-        for page_num, page in enumerate(pdf.pages):
-            page_text = page.extract_text()
-            if page_text:
-                text += f"\n[صفحة {page_num + 1}]\n{page_text}"
-    return text
+    return response.json()["data"][0]["embedding"]
 
 def load_extra_docs(directory: str) -> str:
     text = ""
     path = Path(directory)
     if not path.exists():
         return text
-    for txt_file in path.glob("*.txt"):
+    for txt_file in sorted(path.glob("*.txt")):
         print(f"  📄 Loading: {txt_file.name}")
-        text += f"\n\n[{txt_file.stem}]\n"
-        text += txt_file.read_text(encoding="utf-8")
+        content = txt_file.read_text(encoding="utf-8")
+        text += f"\n\n{content}"
     return text
 
 def clean_text(text: str) -> str:
+    text = re.sub(r'\s+', ' ', text)
     text = re.sub(r'\n{3,}', '\n\n', text)
-    text = re.sub(r' {2,}', ' ', text)
-    text = re.sub(r'\[صفحة \d+\]', '', text)
     return text.strip()
 
 def chunk_text(text: str) -> list:
@@ -71,37 +56,30 @@ def chunk_text(text: str) -> list:
 def main():
     os.makedirs("data", exist_ok=True)
     os.makedirs(EXTRA_DOCS_DIR, exist_ok=True)
-    all_text = ""
-    if os.path.exists(PDF_PATH):
-        print("📄 Extracting text from PDF...")
-        pdf_text = extract_pdf_text(PDF_PATH)
-        all_text += pdf_text
-        print(f"✅ Extracted {len(pdf_text)} characters from PDF")
-    else:
-        print(f"⚠️  PDF not found at {PDF_PATH}")
-    extra_text = load_extra_docs(EXTRA_DOCS_DIR)
-    if extra_text:
-        all_text += extra_text
-    else:
-        print("ℹ️  No extra docs found (thats fine)")
+
+    print("📄 Loading docs...")
+    all_text = load_extra_docs(EXTRA_DOCS_DIR)
+
     if not all_text.strip():
         print("❌ No text found. Exiting.")
         return
+
     all_text = clean_text(all_text)
     chunks = chunk_text(all_text)
     print(f"✅ Created {len(chunks)} chunks")
-    print(f"⏳ Embedding {len(chunks)} chunks via Jina...")
+
+    print(f"\n⏳ Embedding {len(chunks)} chunks via Jina...")
     embeddings = []
     for i, chunk in enumerate(chunks):
         embedding = get_embedding(chunk)
         embeddings.append(embedding)
         if (i + 1) % 5 == 0:
-            print(f"   {i + 1}/{len(chunks)} done...")
-    print(f"✅ Created {len(embeddings)} embeddings")
+            print(f"   {i+1}/{len(chunks)} done...")
+
     with open(VECTOR_STORE_PATH, "wb") as f:
         pickle.dump({"chunks": chunks, "embeddings": embeddings}, f)
-    print(f"\n🎉 Done! Vector store saved with {len(chunks)} chunks")
-    print(f"Next step: uvicorn main:app --reload")
+
+    print(f"\n🎉 Done! {len(chunks)} chunks saved")
 
 if __name__ == "__main__":
     main()
