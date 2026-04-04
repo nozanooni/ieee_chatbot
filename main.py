@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-import google.genai as genai
+from groq import Groq
 import os, numpy as np, pickle, requests, json, re
 from typing import Optional
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ app = FastAPI(title="IEEE KAU Chatbot API")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 VECTOR_STORE_PATH = "data/vector_store.pkl"
 TWEETS_JSON_PATH  = "data/tweets.json"
@@ -183,12 +183,13 @@ def chat(req: ChatRequest):
         conv += f"{role}: {m['content']}\n"
     conv += f"User: {user_msg}"
 
-    response = client.models.generate_content(
-        model="gemini-1.5-flash-8b",
-        contents=conv,
-        config={"temperature": 0.1, "max_output_tokens": 400}
+    completion = groq_client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": conv}],
+        temperature=0.1,
+        max_tokens=400,
     )
-    response_text = response.text
+    response_text = completion.choices[0].message.content
 
     # Strip all URLs and emails
     response_text = re.sub(r'https?://\S+', '', response_text)
