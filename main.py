@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-import google.generativeai as genai
+import google.genai as genai
 import os, numpy as np, pickle, requests, json, re
 from typing import Optional
 from dotenv import load_dotenv
@@ -14,11 +14,7 @@ app = FastAPI(title="IEEE KAU Chatbot API")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-gemini = genai.GenerativeModel(
-    model_name="gemini-2.0-flash",
-    generation_config={"temperature": 0.1, "max_output_tokens": 400}
-)
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 VECTOR_STORE_PATH = "data/vector_store.pkl"
 TWEETS_JSON_PATH  = "data/tweets.json"
@@ -145,7 +141,6 @@ CUTOFF_PHRASES = [
     'للمزيد من المعلومات'
 ]
 
-# ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/app")
 def serve_chat():
     return FileResponse("chat.html")
@@ -167,7 +162,7 @@ def chat(req: ChatRequest):
     if not req.message.strip():
         raise HTTPException(400, "Empty message")
 
-    msg_lower = req.message.lower()
+    msg_lower  = req.message.lower()
     is_event   = any(k in msg_lower for k in EVENT_KW) and not any(k in msg_lower for k in CONTACT_KW)
     is_contact = any(k in msg_lower for k in CONTACT_KW)
 
@@ -178,29 +173,28 @@ def chat(req: ChatRequest):
     if is_event:
         events = get_relevant_events()
 
-    messages = [{"role": "system",
-                 "content": f"{system}\n\nContext:\n{context}" if context else system}]
+    system_msg = f"{system}\n\nContext:\n{context}" if context else system
+    user_msg   = req.message
+
+    # Build conversation string including history
+    conv = system_msg + "\n\n"
     for m in req.conversation_history[-3:]:
-        messages.append(m)
-    messages.append({"role": "user", "content": req.message})
+        role = "User" if m["role"] == "user" else "Assistant"
+        conv += f"{role}: {m['content']}\n"
+    conv += f"User: {user_msg}"
 
-    system_msg   = messages[0]["content"]
-    history_msgs = messages[1:-1]
-    user_msg     = messages[-1]["content"]
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=conv,
+        config={"temperature": 0.1, "max_output_tokens": 400}
+    )
+    response_text = response.text
 
-    gemini_history = []
-    for m in history_msgs:
-        role = "user" if m["role"] == "user" else "model"
-        gemini_history.append({"role": role, "parts": [m["content"]]})
-
-    chat_session = gemini.start_chat(history=gemini_history)
-    full_prompt  = f"{system_msg}\n\nUser: {user_msg}"
-    result       = chat_session.send_message(full_prompt)
-    response_text = result.text
-
+    # Strip all URLs and emails
     response_text = re.sub(r'https?://\S+', '', response_text)
     response_text = re.sub(r'[\w.+%-]+@[\w.-]+\.[a-zA-Z]{2,}', '', response_text)
 
+    # Cut filler if not a contact question
     if not is_contact:
         lines = response_text.split('\n')
         clean = []
