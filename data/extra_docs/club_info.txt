@@ -118,3 +118,14 @@ Committees:
 - Publicity Committee: handles marketing, social media, content creation, and graphic design
 - Executive and Financial Committee: manages budget, financial accounts, and task execution
 - Operating Committee: oversees internal operations and membership
+
+قيادة النادي:
+- المشرفة: د. فلوة أبو خضير
+- الرئيسة: نوال دفتردار
+- نائبة الرئيسة: لمى الشهري
+
+اللجان:
+- لجنة البرامج: تخطط وتنظم الفعاليات والمسابقات وورش العمل
+- لجنة الإعلام والنشر: تتولى التسويق ووسائل التواصل الاجتماعي والتصميم
+- لجنة التنفيذ والمالية: تدير الميزانية والحسابات المالية وتنفيذ المهام
+- اللجنة التشغيلية: تشرف على العمليات الداخلية وشؤون العضوية
