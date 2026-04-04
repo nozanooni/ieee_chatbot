@@ -121,7 +121,7 @@
       <div class="eyebrow" id="landing-eyebrow">IEEE Student Branch — KAU</div>
       <h1 class="title" id="landing-title">Always On.<br/>Always Smart.</h1>
       <p class="subtitle" id="landing-sub">Your intelligent club assistant. Ask about events, committees, and how to join.</p>
-      <a href="chat.html" class="begin-btn" id="landing-btn">
+      <a href="/app" class="begin-btn" id="landing-btn">
         <span id="landing-btn-text">Begin</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -168,7 +168,7 @@
     document.getElementById('opt-en').classList.toggle('active', l==='en');
     document.getElementById('opt-ar').classList.toggle('active', l==='ar');
     // pass lang to chat page via URL param
-    document.getElementById('landing-btn').href = `chat.html?lang=${l}`;
+    document.getElementById('landing-btn').href = `/app?lang=${l}`;
     document.documentElement.dir = l==='ar' ? 'rtl' : 'ltr';
   }
 </script>
