@@ -107,7 +107,7 @@ def retrieve_context(query, top_k=3):
     ea = np.array(embeddings)
     sims = np.dot(ea, qe) / (np.linalg.norm(ea, axis=1) * np.linalg.norm(qe) + 1e-10)
     idxs = np.argsort(sims)[-top_k:][::-1]
-    parts = [chunks[i][:300] for i in idxs if sims[i] > 0.2]
+    parts = [chunks[i][:500] for i in idxs if sims[i] > 0.2]
     return "\n\n---\n\n".join(parts)
 
 class ChatRequest(BaseModel):
@@ -217,9 +217,9 @@ def chat(req: ChatRequest):
     elif is_contact:
         buttons = [
             {"type": "form",      "url": "https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform", "label": "Join Form"},
-            {"type": "instagram", "url": "https://instagram.com/ieee_kau_sb",   "label": "Instagram"},
+            {"type": "instagram", "url": "https://www.instagram.com/ieee_kau?igsh=MW5sMDlzMnJ2OTBnMA==",   "label": "Instagram"},
             {"type": "linkedin",  "url": "https://www.linkedin.com/company/ieeekau-sb-female/", "label": "LinkedIn"},
-            {"type": "telegram",  "url": "https://t.me/FCITIEEEECLUB",          "label": "Telegram"},
+            {"type": "telegram",  "url": "https://t.me/FCITIEEEClub",          "label": "Telegram"},
             {"type": "whatsapp",  "url": "https://chat.whatsapp.com/K12WdGPDFNq8XZ0KzmNSEg", "label": "Research Community (WhatsApp only)"},
             {"type": "email",     "url": "mailto:kau.ieee.sb@gmail.com",         "label": "kau.ieee.sb@gmail.com"},
         ]
