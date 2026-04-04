@@ -6,6 +6,19 @@ import os, numpy as np, pickle, requests, json, re
 from typing import Optional
 from dotenv import load_dotenv
 from datetime import datetime, timezone
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# After app = FastAPI(...) line:
+app.mount("/static", StaticFiles(directory="."), name="static")
+
+@app.get("/app")
+def serve_chat():
+    return FileResponse("chat.html")
+
+@app.get("/landing")
+def serve_index():
+    return FileResponse("index.html")
 
 load_dotenv()
 
