@@ -1,4 +1,6 @@
 [project]
+[tool.fastapi-cloud]
+app = "main:app"
 name = "ieee-chatbot"
 version = "0.1.0"
 description = "Add your description here"
@@ -6,7 +8,13 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "faiss-cpu>=1.13.2",
+    "fastapi[standard]>=0.135.3",
     "feedparser>=6.0.12",
+    "google-generativeai>=0.8.6",
+    "numpy>=2.4.3",
+    "pdfplumber>=0.11.9",
+    "python-dotenv>=1.2.2",
+    "requests>=2.32.5",
     "snscrape>=0.7.0.20230622",
     "uvicorn>=0.41.0",
 ]
