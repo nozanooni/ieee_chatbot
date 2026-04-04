@@ -45,3 +45,65 @@
 حساب إنستقرام: https://instagram.com/ieee_kau_sb
 حساب لينكد إن: https://linkedin.com/company/ieee_kau_sb
 قناة تيليجرام: FCITIEEEECLUB
+
+
+# Add this to your club_info.txt — it fixes the form link and contact info
+
+كيفية الانضمام للنادي - معلومات محدثة:
+رابط نموذج الانضمام الرسمي: https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform
+للانضمام اضغطي على الرابط أعلاه وأكملي النموذج.
+النادي مفتوح لجميع طالبات كلية الحاسبات وتقنية المعلومات.
+لا يشترط خبرة مسبقة، فقط الشغف والرغبة في التعلم.
+
+معلومات التواصل الكاملة:
+البريد الإلكتروني للتواصل مع النادي: kau.ieee.sb@gmail.com
+حساب X وتويتر: https://x.com/ieee_kau_sb
+حساب إنستقرام: https://instagram.com/ieee_kau_sb
+حساب لينكد إن: https://linkedin.com/company/ieee_kau_sb
+قناة تيليجرام: FCITIEEEECLUB
+
+# ADD THIS BLOCK to the bottom of data/extra_docs/club_info.txt
+
+حسابات التواصل الاجتماعي الرسمية للنادي:
+- حساب X (تويتر): https://x.com/ieee_kau_sb
+- حساب إنستقرام: https://instagram.com/ieee_kau_sb  
+- حساب لينكد إن: https://linkedin.com/company/ieee-kau-sb
+- قناة تيليجرام: https://t.me/FCITIEEEECLUB
+- البريد الإلكتروني: kau.ieee.sb@gmail.com
+- نموذج الانضمام: https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform
+المهارات المكتسبة من الانضمام للنادي:
+- مهارات التصميم الجرافيكي وصناعة المحتوى
+- مهارات بناء المواقع الإلكترونية والبرمجة
+- مهارات التخطيط وتنظيم الفعاليات
+- مهارات القيادة وإدارة الفرق
+- مهارات التواصل والعمل الجماعي
+- مهارات التسويق والإعلام الرقمي
+- بناء شبكة علاقات مهنية واجتماعية
+- اكتساب خبرة عملية في مؤسسة عالمية
+
+Skills gained from joining the IEEE club:
+- Graphic design and content creation
+- Web development and programming
+- Event planning and organization
+- Leadership and team management
+- Communication and teamwork
+- Digital marketing and media
+- Building professional and social networks
+- Gaining practical experience in a global organization
+
+الانضمام للنادي متاح لجميع طالبات جامعة الملك عبدالعزيز وليس فقط كلية الحاسبات.
+The club is open to all female students at King Abdulaziz University, not only Computer Science students.
+
+اللجان والأقسام في النادي:
+- لجنة البرامج: تخطط وتنظم الفعاليات والمسابقات والورش
+- لجنة الإعلام: تصميم ومنشورات ووسائل التواصل الاجتماعي وتوثيق الفعاليات
+- لجنة الموقع: بناء وصيانة الموقع الإلكتروني للنادي
+- لجنة الترشيحات: فعاليات داخلية وتعزيز روح الفريق والترويج لعضوية IEEE
+- لجنة التنفيذ والمالية: إدارة الميزانية وتنفيذ المهام
+
+Committees and departments in the club:
+- Program Committee: plans and organizes events, competitions, and workshops
+- Media Committee: design, social media posts, and event documentation
+- Website Committee: builds and maintains the club website
+- Nominations Committee: internal events, team spirit, and IEEE membership promotion
+- Execution and Finance Committee: budget management and task execution
