@@ -184,7 +184,7 @@ def chat(req: ChatRequest):
     conv += f"User: {user_msg}"
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-1.5-flash-8b",
         contents=conv,
         config={"temperature": 0.1, "max_output_tokens": 400}
     )
