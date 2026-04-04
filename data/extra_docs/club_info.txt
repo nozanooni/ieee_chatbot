@@ -107,3 +107,14 @@ Committees and departments in the club:
 - Website Committee: builds and maintains the club website
 - Nominations Committee: internal events, team spirit, and IEEE membership promotion
 - Execution and Finance Committee: budget management and task execution
+
+Club Leadership:
+- Supervisor: Dr. Falwa Abu Khudair
+- President: Nawal Daftardar  
+- Vice President: Lama Al-Shahri
+
+Committees:
+- Program Committee: plans and organizes events, competitions, workshops, and IEEE special events like IEEEXtreme and IEEE Day
+- Publicity Committee: handles marketing, social media, content creation, and graphic design
+- Executive and Financial Committee: manages budget, financial accounts, and task execution
+- Operating Committee: oversees internal operations and membership
