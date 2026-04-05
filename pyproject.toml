@@ -1,0 +1,19 @@
+[project]
+name = "ieee-chatbot"
+version = "0.1.0"
+description = "IEEE KAU Student Branch Chatbot"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi[standard]>=0.115.0",
+    "uvicorn>=0.30.0",
+    "numpy>=1.26.0",
+    "requests>=2.32.0",
+    "python-dotenv>=1.0.0",
+    "pdfplumber>=0.11.0",
+    "feedparser>=6.0.0",
+    "google-genai>=1.70.0",
+    "groq>=1.1.2",
+]
+
+[tool.fastapi-cloud]
+app = "main:app"

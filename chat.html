@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IEEE KAU Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --c1:#e7eaf9;--c2:#98abe6;--c3:#4d6dd4;--c4:#012dc1;--c5:#0a2184;--c6:#071860;
+      --glass:rgba(255,255,255,.70);--glass-b:rgba(255,255,255,.55);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;font-family:'IBM Plex Sans Arabic',sans-serif;
+      background:#06091a;display:flex;justify-content:center;align-items:flex-start;
+      position:relative;padding:20px;overflow-y:auto;
+    }
+    .blur{position:absolute;border-radius:50%;filter:blur(160px);z-index:0;pointer-events:none}
+    .blur1{width:520px;height:520px;background:var(--c4);top:-180px;left:-180px;opacity:.18}
+    .blur2{width:520px;height:520px;background:#1a0a5e;bottom:-180px;right:-180px;opacity:.28}
+
+    .phone{
+      width:min(460px, 100%);min-height:88vh;max-height:none;border-radius:44px;
+      background:linear-gradient(165deg,#edf0fd 0%,#b8c8ef 50%,#5a78d8 100%);
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow:0 32px 72px rgba(7,24,96,.22),0 0 0 1px rgba(255,255,255,.35) inset;
+      padding:20px 20px 24px;
+      display:flex;flex-direction:column;position:relative;z-index:2;
+      margin:20px auto;
+    }
+    @media(max-width:500px){
+      .phone{border-radius:24px;padding:16px 14px 18px;margin:10px auto;}
+      body{padding:10px;}
+    }
+
+    /* HEADER */
+    .header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:12px;flex-shrink:0;
+    }
+    .back-btn{
+      width:34px;height:34px;border-radius:12px;border:none;cursor:pointer;
+      background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.6);
+      backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;
+      transition:all .18s;flex-shrink:0;
+    }
+    .back-btn:hover{background:rgba(255,255,255,.65);transform:translateX(-2px)}
+    .back-btn svg{width:16px;height:16px;color:var(--c6)}
+    .header-center{display:flex;flex-direction:column;align-items:center;gap:2px}
+    .header-name{
+      font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;
+      color:var(--c6);letter-spacing:-.2px;
+    }
+    .header-status{font-size:10.5px;color:var(--c5);opacity:.65;display:flex;align-items:center;gap:4px}
+    .dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+    /* language toggle in header */
+    .lang-toggle{
+      display:flex;align-items:center;gap:2px;
+      background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.6);
+      backdrop-filter:blur(10px);border-radius:18px;padding:3px;
+    }
+    .lang-opt{
+      padding:3px 10px;border-radius:14px;font-size:10.5px;font-weight:700;
+      color:var(--c5);transition:all .18s;letter-spacing:.4px;cursor:pointer;
+      border:none;background:transparent;font-family:inherit;
+    }
+    .lang-opt.active{background:var(--c4);color:white;box-shadow:0 2px 6px rgba(1,45,193,.28)}
+
+    /* CHIPS */
+    .chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;flex-shrink:0}
+    .chip{
+      background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.6);
+      backdrop-filter:blur(8px);border-radius:14px;padding:5px 12px;
+      font-size:11px;color:var(--c6);cursor:pointer;font-family:inherit;
+      font-weight:500;transition:all .18s;white-space:nowrap;
+    }
+    .chip:hover{background:var(--c4);color:white;border-color:var(--c4);transform:translateY(-1px)}
+
+    /* CHAT */
+    .chat-area{
+      flex:1;min-height:300px;overflow-y:auto;display:flex;flex-direction:column;
+      gap:10px;padding:2px 2px 4px;scroll-behavior:smooth;
+    }
+    .chat-area::-webkit-scrollbar{width:3px}
+    .chat-area::-webkit-scrollbar-thumb{background:rgba(1,45,193,.18);border-radius:3px}
+
+    .chat-row{display:flex;align-items:flex-end;gap:7px}
+    .bot-row{justify-content:flex-start}
+    .user-row{justify-content:flex-end}
+
+    .av{width:26px;height:26px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .av-bot{background:linear-gradient(135deg,var(--c4),var(--c3));box-shadow:0 3px 8px rgba(1,45,193,.22)}
+    .av-bot svg{width:13px;height:13px;color:white}
+    .av-user{background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.6)}
+    .av-user svg{width:13px;height:13px;color:var(--c5)}
+
+    .message{
+      padding:10px 14px;border-radius:18px;max-width:74%;
+      font-size:13.5px;line-height:1.7;word-break:break-word;
+      animation:up .22s ease;
+    }
+    @keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    .bot-msg{
+      background:var(--glass);color:var(--c6);
+      border-bottom-left-radius:4px;
+      box-shadow:0 3px 14px rgba(7,24,96,.07);
+      border:1px solid var(--glass-b);backdrop-filter:blur(12px);
+    }
+    .user-msg{
+      background:linear-gradient(135deg,var(--c4),var(--c3));color:white;
+      border-bottom-right-radius:4px;
+      box-shadow:0 4px 14px rgba(1,45,193,.28);
+    }
+    .bot-msg strong{font-weight:700;color:var(--c4)}
+    .md-list{margin:6px 0 2px;display:flex;flex-direction:column;gap:5px}
+    .md-item{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+    .md-dot{width:5px;height:5px;border-radius:50%;background:var(--c4);flex-shrink:0;margin-top:7px}
+
+    /* BUTTONS */
+    .lbtn{
+      display:inline-flex;align-items:center;gap:5px;
+      color:white!important;text-decoration:none;
+      padding:5px 12px;border-radius:18px;font-size:11.5px;font-weight:600;
+      margin:2px;transition:all .18s;cursor:pointer;font-family:inherit;border:none;
+    }
+    .lbtn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .lbtn.wa{background:#16a34a}
+    .lbtn.em{background:#dc2626}
+    .lbtn.fm{background:var(--c4)}
+    .lbtn.xb{background:#0f172a}
+    .lbtn.mt{background:#0d9488}
+    .lbtn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+    .lbtn.li{background:#0077b5}
+    .lbtn.tg{background:#229ed9}
+    .lbtn svg{width:11px;height:11px}
+    .btn-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+
+    /* EVENT CARD */
+    .ev-card{
+      background:var(--glass);backdrop-filter:blur(12px);
+      border:1px solid var(--glass-b);border-radius:16px;
+      padding:12px 14px;max-width:88%;
+      box-shadow:0 3px 14px rgba(7,24,96,.07);
+      border-left:3px solid var(--c4);align-self:flex-start;animation:up .22s ease;
+    }
+    .ev-badge{
+      display:inline-block;font-size:9.5px;font-weight:700;
+      letter-spacing:.8px;text-transform:uppercase;
+      padding:2px 8px;border-radius:18px;margin-bottom:5px;
+    }
+    .b-up{background:#dcfce7;color:#15803d}
+    .b-rc{background:#fef9c3;color:#a16207}
+    .b-pa{background:#f1f5f9;color:#64748b}
+    .ev-date{font-size:11px;color:var(--c5);opacity:.7;margin-bottom:5px;font-weight:500}
+    .ev-text{font-size:13px;color:var(--c6);line-height:1.65;margin-bottom:8px}
+
+    /* TYPING */
+    .typing{
+      display:flex;gap:4px;align-items:center;padding:10px 14px;
+      background:var(--glass);border:1px solid var(--glass-b);backdrop-filter:blur(12px);
+      border-radius:18px;border-bottom-left-radius:4px;
+      align-self:flex-start;box-shadow:0 3px 12px rgba(7,24,96,.06);
+    }
+    .typing span{width:5px;height:5px;background:var(--c4);border-radius:50%;opacity:.45;animation:tb 1.2s infinite}
+    .typing span:nth-child(2){animation-delay:.2s}
+    .typing span:nth-child(3){animation-delay:.4s}
+    @keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-5px);opacity:1}}
+
+    /* INPUT */
+    .input-wrap{margin-top:10px;display:flex;gap:9px;align-items:center;flex-shrink:0}
+    .chat-input{
+      flex:1;padding:11px 16px;border-radius:24px;border:none;outline:none;
+      background:rgba(255,255,255,.55);backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.65);
+      color:var(--c6);font-size:13.5px;font-family:inherit;
+      box-shadow:0 2px 8px rgba(7,24,96,.05);transition:all .2s;
+    }
+    .chat-input:focus{background:rgba(255,255,255,.82);border-color:rgba(1,45,193,.25)}
+    .chat-input::placeholder{color:var(--c5);opacity:.45}
+    .send-btn{
+      width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+      background:linear-gradient(135deg,var(--c4),var(--c3));
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      box-shadow:0 8px 20px rgba(1,45,193,.32);transition:all .18s;
+    }
+    .send-btn:hover{transform:scale(1.08);box-shadow:0 12px 26px rgba(1,45,193,.42)}
+    .send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .send-btn svg{width:17px;height:17px;color:white}
+
+    .sec-lbl{
+      font-size:10px;color:var(--c5);text-align:center;
+      padding:2px 0;opacity:.6;letter-spacing:.6px;text-transform:uppercase;font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <div class="blur blur1"></div>
+  <div class="blur blur2"></div>
+  <div class="phone">
+
+    <!-- HEADER -->
+    <div class="header">
+      <!-- Back button -->
+      <button class="back-btn" onclick="history.length>1?history.back():window.location='index.html'" title="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </button>
+
+      <!-- Center title -->
+      <div class="header-center">
+        <div class="header-name">IEEE KAU Assistant</div>
+        <div class="header-status"><span class="dot"></span><span id="statusTxt">Online</span></div>
+      </div>
+
+      <!-- Language toggle -->
+      <div class="lang-toggle">
+        <button class="lang-opt active" id="opt-en" onclick="setLang('en')">EN</button>
+        <button class="lang-opt"        id="opt-ar" onclick="setLang('ar')">AR</button>
+      </div>
+    </div>
+
+    <!-- CHIPS -->
+    <div class="chips" id="chips">
+      <button class="chip" onclick="askChip(this)">How to join?</button>
+      <button class="chip" onclick="askChip(this)">Committees</button>
+      <button class="chip" onclick="askChip(this)">Upcoming events</button>
+      <button class="chip" onclick="askChip(this)">Who leads the club?</button>
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-area" id="chatArea">
+      <div class="chat-row bot-row">
+        <div class="av av-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 3v4m-3 0h6"/><circle cx="8.5" cy="16" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.5" cy="16" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+        <div class="message bot-msg" id="welcomeMsg">Hello! I'm the IEEE KAU club assistant. How can I help you today?</div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-wrap" id="inputWrap">
+      <input type="text" class="chat-input" id="userInput"
+        placeholder="Write your message..."
+        onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+<script>
+const API  = 'http://localhost:8000';
+const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform';
+let hist=[], lang='en';
+
+// Read lang from URL param (set by landing page)
+const urlLang = new URLSearchParams(window.location.search).get('lang');
+if(urlLang==='ar') { lang='ar'; }
+
+// ── Sound ─────────────────────────────────────────────────────────────────────
+function beep(f,d){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.setValueAtTime(0.04,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);o.start();o.stop(c.currentTime+d);}catch(e){}}
+
+// ── Icons (SVG strings) ───────────────────────────────────────────────────────
+const IC={
+  ext:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+  mail:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  msg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+  vid:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>`,
+};
+
+// ── Language ──────────────────────────────────────────────────────────────────
+function applyLang(){
+  const ar=lang==='ar';
+  document.getElementById('opt-en').classList.toggle('active',!ar);
+  document.getElementById('opt-ar').classList.toggle('active',ar);
+  document.getElementById('statusTxt').textContent = ar?'متصلة':'Online';
+  const iw=document.getElementById('inputWrap');
+  const inp=document.getElementById('userInput');
+  iw.style.flexDirection = ar?'row-reverse':'row';
+  inp.style.direction    = ar?'rtl':'ltr';
+  inp.style.textAlign    = ar?'right':'left';
+  inp.placeholder        = ar?'اكتبي سؤالك هنا...':'Write your message...';
+  document.getElementById('welcomeMsg').textContent = ar
+    ? 'أهلاً! أنا مساعدة نادي IEEE في جامعة الملك عبدالعزيز. كيف أقدر أساعدك؟'
+    : "Hello! I'm the IEEE KAU club assistant. How can I help you today?";
+  const c=document.getElementById('chips');
+  if(c) c.innerHTML = ar
+    ? '<button class="chip" onclick="askChip(this)">كيف أنضم للنادي؟</button><button class="chip" onclick="askChip(this)">اللجان</button><button class="chip" onclick="askChip(this)">الفعاليات القادمة</button><button class="chip" onclick="askChip(this)">من هي الرئيسة؟</button>'
+    : '<button class="chip" onclick="askChip(this)">How to join?</button><button class="chip" onclick="askChip(this)">Committees</button><button class="chip" onclick="askChip(this)">Upcoming events</button><button class="chip" onclick="askChip(this)">Who leads the club?</button>';
+}
+
+function setLang(l){lang=l;applyLang();}
+
+// Init lang on load
+applyLang();
+
+// ── Chips ─────────────────────────────────────────────────────────────────────
+function askChip(btn){
+  document.getElementById('userInput').value=btn.textContent.trim();
+  const c=document.getElementById('chips');if(c)c.style.display='none';
+  sendMsg();
+}
+
+// ── Markdown ──────────────────────────────────────────────────────────────────
+function renderMd(t){
+  let h=t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  const lines=h.split('\n');let out='',inL=false,lH='';
+  for(let l of lines){
+    const m=l.match(/^[\-\*•]\s+(.+)/);
+    if(m){if(!inL){inL=true;lH='<div class="md-list">';}lH+=`<div class="md-item"><span class="md-dot"></span><span>${m[1]}</span></div>`;}
+    else{if(inL){out+=lH+'</div>';inL=false;lH='';}out+=l+(l.trim()?'<br>':'');}
+  }
+  if(inL)out+=lH+'</div>';
+  return out.replace(/(<br>)+$/,'').replace(/^(<br>)+/,'');
+}
+
+// ── Links ─────────────────────────────────────────────────────────────────────
+function procLinks(raw){
+  // URLs are stripped server-side. Just render markdown, no URL scanning needed.
+  return renderMd(raw.trim());
+}
+
+function renderButtons(buttons, ar, targetMsg){
+  if(!buttons || buttons.length===0) return;
+  // WhatsApp warning
+  const hasWa = buttons.some(b=>b.type==='whatsapp');
+  if(hasWa && targetMsg){
+    const warn = document.createElement('div');
+    warn.style.cssText='font-size:11px;color:#854d0e;background:#fef9c3;padding:5px 10px;border-radius:8px;margin:6px 0 4px;';
+    warn.textContent = ar ? 'تنبيه: مجموعة الواتساب خاصة بمجتمع البحث فقط وليست للانضمام العام'
+                          : 'Note: This WhatsApp group is for the Research Community only, not general membership.';
+    targetMsg.appendChild(warn);
+  }
+  const row = document.createElement('div');
+  row.className = 'btn-row';
+  const iconMap = {form:IC.ext,instagram:IC.ext,whatsapp:IC.msg,email:IC.mail,x:IC.ext,linkedin:IC.ext,telegram:IC.ext,meet:IC.vid};
+  const clsMap  = {form:'fm',instagram:'ig',whatsapp:'wa',email:'em',x:'xb',linkedin:'li',telegram:'tg',meet:'mt'};
+  buttons.forEach(b=>{
+    const a = document.createElement('a');
+    a.href=b.url; a.target='_blank';
+    a.className=`lbtn ${clsMap[b.type]||'fm'}`;
+    a.innerHTML=`${iconMap[b.type]||IC.ext} ${b.label}`;
+    row.appendChild(a);
+  });
+  if(targetMsg) targetMsg.appendChild(row);
+  else document.getElementById('chatArea').appendChild(row);
+  sc();
+}
+
+// ── Avatars ───────────────────────────────────────────────────────────────────
+const BOT_AV=`<div class="av av-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 3v4m-3 0h6"/><circle cx="8.5" cy="16" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.5" cy="16" r="1.5" fill="currentColor" stroke="none"/></svg></div>`;
+const USR_AV=`<div class="av av-user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
+
+// ── Add message ───────────────────────────────────────────────────────────────
+function addMsg(text,role){
+  const row=document.createElement('div');
+  row.className=`chat-row ${role==='bot'?'bot-row':'user-row'}`;
+  const msg=document.createElement('div');
+  msg.className=`message ${role==='bot'?'bot-msg':'user-msg'}`;
+  if(role==='bot')msg.innerHTML=procLinks(text);else msg.textContent=text;
+  if(role==='bot'){row.innerHTML=BOT_AV;row.appendChild(msg);}
+  else{row.appendChild(msg);row.innerHTML+=USR_AV;}
+  document.getElementById('chatArea').appendChild(row);sc();
+  return msg;
+}
+
+// ── Event card ────────────────────────────────────────────────────────────────
+function addCard(ev){
+  const card=document.createElement('div');card.className='ev-card';
+  const ar=lang==='ar';
+  let ds='';
+  if(ev.date){try{const dt=new Date(ev.date);ds=dt.toLocaleString(ar?'ar-SA':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Riyadh'});}catch(e){ds=ev.date.slice(0,16);}}
+  let badge,bc;
+  if(ev.is_upcoming){badge=ar?'قادم':'Upcoming';bc='b-up';}
+  else if(ev.days_old!==null&&ev.days_old<=3){badge=ar?'حديث':'Recent';bc='b-rc';}
+  else{badge=ar?'سابق':'Past';bc='b-pa';}
+  const sum=ev.title.length>160?ev.title.slice(0,160)+'...':ev.title;
+  let ab='';
+  if(ev.link){const x=ev.link.replace('nitter.net','x.com');ab+=`<a href="${x}" target="_blank" class="lbtn xb" style="font-size:11px;padding:5px 10px;">${IC.ext} ${ar?'عرض على X':'View on X'}</a>`;}
+  if(ev.meet)ab+=`<a href="${ev.meet}" target="_blank" class="lbtn mt" style="font-size:11px;padding:5px 10px;">${IC.vid} ${ar?'انضمي':'Join'}</a>`;
+  if(ev.whatsapp)ab+=`<a href="${ev.whatsapp}" target="_blank" class="lbtn wa" style="font-size:11px;padding:5px 10px;">${IC.msg} ${ar?'البحث':'Research WA'}</a>`;
+  if(ev.form)ab+=`<a href="${ev.form}" target="_blank" class="lbtn fm" style="font-size:11px;padding:5px 10px;">${IC.ext} ${ar?'سجّلي':'Register'}</a>`;
+  card.innerHTML=`<span class="ev-badge ${bc}">${badge}</span>${ds?`<div class="ev-date">${ds}</div>`:''}
+    <div class="ev-text">${sum}</div>${ab?`<div class="btn-row">${ab}</div>`:''}`;
+  document.getElementById('chatArea').appendChild(card);sc();
+}
+
+function addTyping(){
+  const d=document.createElement('div');d.className='typing';
+  d.innerHTML='<span></span><span></span><span></span>';
+  document.getElementById('chatArea').appendChild(d);sc();return d;
+}
+function addLbl(t){
+  const d=document.createElement('div');d.className='sec-lbl';d.textContent=t;
+  document.getElementById('chatArea').appendChild(d);sc();
+}
+function sc(){const a=document.getElementById('chatArea');a.scrollTop=a.scrollHeight;}
+
+// ── Send ──────────────────────────────────────────────────────────────────────
+async function sendMsg(){
+  const inp=document.getElementById('userInput');
+  const btn=document.getElementById('sendBtn');
+  const msg=inp.value.trim();if(!msg)return;
+  const c=document.getElementById('chips');if(c)c.style.display='none';
+  addMsg(msg,'user');beep(440,.08);inp.value='';btn.disabled=true;
+  const ty=addTyping();
+  hist.push({role:'user',content:msg});
+  try{
+    const res=await fetch(`${API}/chat`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg,language:lang,conversation_history:hist.slice(-6)})
+    });
+    const data=await res.json();
+    ty.remove();const botMsgEl=addMsg(data.response,'bot');beep(560,.12);
+    hist.push({role:'assistant',content:data.response});
+    renderButtons(data.buttons||[], lang==='ar', botMsgEl);
+    if(data.events&&data.events.length>0){
+      const ar=lang==='ar';
+      const up=data.events.filter(e=>e.is_upcoming);
+      const rc=data.events.filter(e=>!e.is_upcoming&&e.days_old!==null&&e.days_old<=3);
+      const pa=data.events.filter(e=>!e.is_upcoming&&(e.days_old===null||e.days_old>3));
+      if(up.length>0){addLbl(ar?'الفعاليات القادمة':'UPCOMING EVENTS');up.forEach(e=>addCard(e));}
+      else if(rc.length>0){addLbl(ar?'منشورات حديثة':'RECENT POSTS');rc.slice(0,3).forEach(e=>addCard(e));}
+      else if(pa.length>0){addLbl(ar?'فعاليات سابقة':'PAST EVENTS');pa.slice(0,3).forEach(e=>addCard(e));}
+    }
+  }catch(err){
+    ty.remove();
+    addMsg(lang==='ar'?'عذراً، في مشكلة بالاتصال.':'Connection error — make sure the API is running.','bot');
+  }
+  btn.disabled=false;inp.focus();
+}
+</script>
+</body>
+</html>

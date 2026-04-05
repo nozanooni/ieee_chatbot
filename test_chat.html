@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IEEE KAU Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1B3A8F;--primary-light:#2451b8;--primary-dark:#0f2260;
+  --bg:#0D1425;--surface:#fff;--surface-2:#f0f4ff;
+  --text:#1a1f36;--muted:#6b7280;--border:#e2e8f8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  background:var(--bg);min-height:100vh;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  background-image:radial-gradient(ellipse at 20% 50%,#1B3A8F18 0%,transparent 60%),
+                   radial-gradient(ellipse at 80% 20%,#4ADE8010 0%,transparent 50%);
+}
+.chat-wrapper{
+  width:100%;max-width:460px;display:flex;flex-direction:column;
+  height:92vh;max-height:720px;background:var(--surface);
+  border-radius:18px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);
+}
+/* HEADER */
+.chat-header{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--primary-light));
+  padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-logo{
+  width:42px;height:42px;background:white;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);flex-shrink:0;
+}
+.header-title{color:white}
+.header-title h3{font-size:15px;font-weight:700}
+.header-title p{font-size:11px;opacity:.75;margin-top:2px}
+.online-dot{width:7px;height:7px;background:#4ADE80;border-radius:50%;display:inline-block;margin-left:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.lang-toggle{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:20px;padding:5px 14px;color:white;font-size:12px;
+  font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;
+}
+.lang-toggle:hover{background:rgba(255,255,255,.3)}
+/* MESSAGES */
+.messages{
+  flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--surface-2);scroll-behavior:smooth;
+}
+.messages::-webkit-scrollbar{width:4px}
+.messages::-webkit-scrollbar-thumb{background:#c7d2fe;border-radius:4px}
+/* CHIPS */
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 6px}
+/* BUBBLES */
+.message{
+  max-width:84%;padding:11px 15px;border-radius:16px;
+  font-size:14px;line-height:1.75;word-break:break-word;animation:fadeUp .25s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.message.bot{background:white;color:var(--text);box-shadow:0 2px 8px rgba(27,58,143,.08)}
+.message.user{background:var(--primary);color:white;box-shadow:0 2px 12px rgba(27,58,143,.3)}
+.message.bot strong{font-weight:700;color:var(--primary)}
+.message.bot .md-list{margin:8px 0 4px;display:flex;flex-direction:column;gap:6px}
+.message.bot .md-item{display:flex;gap:8px;align-items:flex-start;font-size:13.5px}
+.message.bot .md-bullet{color:var(--primary);font-weight:700;flex-shrink:0;margin-top:2px}
+/* CHIPS */
+.chip{
+  background:white;border:1.5px solid var(--border);border-radius:20px;
+  padding:7px 14px;font-size:12.5px;color:var(--primary);cursor:pointer;
+  font-family:inherit;font-weight:500;transition:all .18s;white-space:nowrap;
+  box-shadow:0 1px 4px rgba(27,58,143,.08);
+}
+.chip:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-1px)}
+/* LINK BUTTONS */
+.link-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  color:white!important;text-decoration:none;padding:8px 14px;border-radius:10px;
+  font-size:13px;font-weight:600;margin:2px;transition:all .18s;cursor:pointer;
+  font-family:inherit;border:none;
+}
+.link-btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.link-btn.whatsapp{background:#25D366}
+.link-btn.email{background:#ea4335}
+.link-btn.form{background:#4285f4}
+.link-btn.x-btn{background:#000}
+.link-btn.meet{background:#00897B}
+.link-btn.primary{background:var(--primary)}
+.btn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+/* EVENT CARD */
+.event-card{
+  background:white;border-radius:14px;padding:14px;
+  box-shadow:0 2px 12px rgba(27,58,143,.1);max-width:92%;animation:fadeUp .25s ease;
+  align-self:flex-start;
+}
+.event-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:6px}
+.badge-upcoming{background:#dcfce7;color:#166534}
+.badge-recent{background:#fef9c3;color:#854d0e}
+.badge-past{background:#f3f4f6;color:#6b7280}
+.event-date{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.event-text{font-size:13.5px;color:var(--text);line-height:1.65;margin-bottom:10px}
+/* TYPING */
+.typing{
+  display:flex;gap:5px;align-items:center;padding:12px 16px;
+  background:white;border-radius:16px;align-self:flex-start;
+  box-shadow:0 2px 8px rgba(27,58,143,.08);
+}
+.typing span{width:7px;height:7px;background:var(--primary);border-radius:50%;opacity:.6;animation:tb 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.6}30%{transform:translateY(-6px);opacity:1}}
+/* INPUT AREA — controlled entirely by JS via inline style */
+.input-area{
+  padding:12px 14px;background:white;
+  border-top:1px solid var(--border);
+  display:flex;gap:10px;align-items:center;
+  /* flex-direction set by JS */
+}
+.input-area input{
+  flex:1;border:2px solid var(--border);border-radius:24px;
+  padding:10px 16px;font-size:14px;font-family:inherit;
+  outline:none;color:var(--text);background:var(--surface-2);transition:border-color .2s;
+}
+.input-area input:focus{border-color:var(--primary);background:white}
+.send-btn{
+  width:44px;height:44px;background:var(--primary);border:none;
+  border-radius:50%;color:white;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;flex-shrink:0;box-shadow:0 2px 8px rgba(27,58,143,.3);
+}
+.send-btn:hover{background:var(--primary-light);transform:scale(1.05)}
+.send-btn:disabled{background:#c7d2fe;cursor:not-allowed;transform:none}
+.section-label{font-size:11.5px;color:var(--muted);text-align:center;padding:4px 0}
+</style>
+</head>
+<body>
+<div class="chat-wrapper" id="chatWrapper">
+  <div class="chat-header">
+    <div class="header-left">
+      <div class="header-logo">
+        <svg viewBox="0 0 42 42" width="38" height="38">
+          <rect width="42" height="42" rx="8" fill="#1B3A8F"/>
+          <text x="21" y="27" text-anchor="middle" font-size="10" font-weight="800" fill="white" font-family="Arial">IEEE</text>
+        </svg>
+      </div>
+      <div class="header-title">
+        <h3><span class="online-dot"></span>IEEE KAU Assistant</h3>
+        <p id="headerSub">اسألي عن النادي وفعالياته</p>
+      </div>
+    </div>
+    <button class="lang-toggle" onclick="toggleLang()" id="langBtn">EN</button>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="message bot" id="welcomeMsg">
+      أهلاً وسهلاً! 👋 أنا مساعدة نادي IEEE في جامعة الملك عبدالعزيز. كيف أقدر أساعدك؟
+    </div>
+    <div class="suggestions" id="suggestions">
+      <button class="chip" onclick="askChip(this)">كيف أنضم للنادي؟</button>
+      <button class="chip" onclick="askChip(this)">من هي رئيسة النادي؟</button>
+      <button class="chip" onclick="askChip(this)">ما هي اللجان؟</button>
+      <button class="chip" onclick="askChip(this)">الفعاليات القادمة</button>
+    </div>
+  </div>
+
+  <!-- Input area — direction set by JS on init and toggle -->
+  <div class="input-area" id="inputArea" style="flex-direction:row-reverse">
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M22 2L11 13" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <input type="text" id="userInput" placeholder="اكتبي سؤالك هنا..."
+      style="direction:rtl;text-align:right"
+      onkeydown="if(event.key==='Enter')sendMessage()"/>
+  </div>
+</div>
+
+<script>
+const API  = 'http://localhost:8000';
+const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform';
+const WA_RESEARCH = 'https://chat.whatsapp.com/K12WdGPDFNq8XZ0KzmNSEg';
+let history = [], lang = 'ar';
+
+// ── Sound ────────────────────────────────────────────────────────────────────
+function playSound(f,d){
+  try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.frequency.value=f;
+    g.gain.setValueAtTime(0.05,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);
+    o.start();o.stop(c.currentTime+d);}catch(e){}
+}
+
+// ── Language toggle — uses inline style directly on #inputArea ───────────────
+function setDir(isAr) {
+  const inputArea = document.getElementById('inputArea');
+  const userInput = document.getElementById('userInput');
+  if (isAr) {
+    inputArea.style.flexDirection = 'row-reverse';
+    userInput.style.direction = 'rtl';
+    userInput.style.textAlign = 'right';
+  } else {
+    inputArea.style.flexDirection = 'row';
+    userInput.style.direction = 'ltr';
+    userInput.style.textAlign = 'left';
+  }
+  // Also fix message bubble alignment via wrapper dir
+  document.getElementById('chatWrapper').setAttribute('dir', isAr ? 'rtl' : 'ltr');
+  // Fix suggestions alignment
+  const sugg = document.getElementById('suggestions');
+  if (sugg) sugg.style.justifyContent = isAr ? 'flex-end' : 'flex-start';
+  // Fix all existing messages alignment
+  document.querySelectorAll('.message.bot').forEach(m => {
+    m.style.alignSelf = 'flex-start';
+    m.style.borderBottomRightRadius = isAr ? '4px' : '16px';
+    m.style.borderBottomLeftRadius  = isAr ? '16px' : '4px';
+  });
+  document.querySelectorAll('.message.user').forEach(m => {
+    m.style.alignSelf = 'flex-end';
+    m.style.borderBottomLeftRadius  = isAr ? '4px' : '16px';
+    m.style.borderBottomRightRadius = isAr ? '16px' : '4px';
+  });
+}
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  const isAr = lang === 'ar';
+  setDir(isAr);
+  document.getElementById('langBtn').textContent = isAr ? 'EN' : 'AR';
+  document.getElementById('headerSub').textContent = isAr ? 'اسألي عن النادي وفعالياته' : 'Ask about the club & events';
+  document.getElementById('userInput').placeholder = isAr ? 'اكتبي سؤالك هنا...' : 'Type your question...';
+  document.getElementById('welcomeMsg').textContent = isAr
+    ? 'أهلاً وسهلاً! 👋 أنا مساعدة نادي IEEE في جامعة الملك عبدالعزيز. كيف أقدر أساعدك؟'
+    : "Hello! 👋 I'm the IEEE KAU assistant. How can I help you?";
+}
+
+// ── Chips ────────────────────────────────────────────────────────────────────
+function askChip(btn) {
+  document.getElementById('userInput').value = btn.textContent.trim();
+  const s = document.getElementById('suggestions');
+  if (s) s.style.display = 'none';
+  sendMessage();
+}
+
+// ── Markdown ─────────────────────────────────────────────────────────────────
+function renderMd(text) {
+  let html = text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  const lines = html.split('\n');
+  let out='', inList=false, listHtml='';
+  for (let line of lines) {
+    const m = line.match(/^[\-\*•]\s+(.+)/);
+    if (m) {
+      if (!inList){inList=true;listHtml='<div class="md-list">';}
+      listHtml+=`<div class="md-item"><span class="md-bullet">•</span><span>${m[1]}</span></div>`;
+    } else {
+      if (inList){out+=listHtml+'</div>';inList=false;listHtml='';}
+      out += line + (line.trim() ? '<br>' : '');
+    }
+  }
+  if (inList) out+=listHtml+'</div>';
+  return out.replace(/(<br>)+$/,'').replace(/^(<br>)+/,'');
+}
+
+// ── Link processing ───────────────────────────────────────────────────────────
+function processLinks(rawText) {
+  let btns='', text=rawText;
+
+  // WhatsApp — only show as research community
+  text = text.replace(/(https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+)/g, url => {
+    btns += `<a href="${url.replace(/[.,)]+$/,'')}" target="_blank" class="link-btn whatsapp">💬 ${lang==='ar'?'مجتمع البحث (واتساب)':'Research Community (WhatsApp)'}</a>`;
+    return '';
+  });
+  // Google Meet
+  text = text.replace(/(https?:\/\/meet\.google\.com\/\S+)/g, url => {
+    btns += `<a href="${url.replace(/[.,)]+$/,'')}" target="_blank" class="link-btn meet">📹 ${lang==='ar'?'رابط الحضور':'Join Meeting'}</a>`;
+    return '';
+  });
+  // Google Forms
+  text = text.replace(/(https?:\/\/(?:forms\.gle|docs\.google\.com\/forms)\/\S+)/g, url => {
+    btns += `<a href="${url.replace(/[.,)]+$/,'')}" target="_blank" class="link-btn form">📝 ${lang==='ar'?'افتحي النموذج':'Open Form'}</a>`;
+    return '';
+  });
+  // X / nitter
+  text = text.replace(/(https?:\/\/(?:nitter\.net|twitter\.com|x\.com)\/\S+)/g, url => {
+    const x = url.replace('nitter.net','x.com').replace(/[.,)]+$/,'');
+    btns += `<a href="${x}" target="_blank" class="link-btn x-btn">𝕏 ${lang==='ar'?'افتحي على X':'View on X'}</a>`;
+    return '';
+  });
+  // Email
+  text = text.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, email => {
+    btns += `<a href="mailto:${email}" class="link-btn email">✉️ ${email}</a>`;
+    return email;
+  });
+
+  // Auto-inject form ONLY for join queries (once, not on every message)
+  const lastMsg = history.length ? history[history.length-1].content.toLowerCase() : '';
+  const isJoin = ['كيف أنضم','كيف انضم','how to join','how do i join','i want to join'].some(k=>lastMsg.includes(k));
+  if (isJoin && !btns.includes('form')) {
+    btns += `<a href="${FORM}" target="_blank" class="link-btn form">📝 ${lang==='ar'?'افتحي النموذج':'Open Form'}</a>`;
+  }
+
+  text = text.replace(/🔗\s*:?\s*/g,'').replace(/ {2,}/g,' ').trim();
+  return renderMd(text) + (btns ? `<div class="btn-row">${btns}</div>` : '');
+}
+
+// ── Append message ────────────────────────────────────────────────────────────
+function appendMessage(text, role) {
+  const isAr = lang === 'ar';
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  if (role === 'bot') {
+    div.innerHTML = processLinks(text);
+    div.style.alignSelf = 'flex-start';
+    div.style.borderBottomRightRadius = isAr ? '4px' : '16px';
+    div.style.borderBottomLeftRadius  = isAr ? '16px' : '4px';
+  } else {
+    div.textContent = text;
+    div.style.alignSelf = 'flex-end';
+    div.style.borderBottomLeftRadius  = isAr ? '4px' : '16px';
+    div.style.borderBottomRightRadius = isAr ? '16px' : '4px';
+  }
+  document.getElementById('messages').appendChild(div);
+  scrollDown();
+  return div;
+}
+
+// ── Event card ────────────────────────────────────────────────────────────────
+function appendEventCard(event) {
+  const card = document.createElement('div');
+  card.className = 'event-card';
+
+  // Date formatting
+  let dateStr = '';
+  if (event.date) {
+    try {
+      const dt = new Date(event.date);
+      dateStr = dt.toLocaleString(lang==='ar'?'ar-SA':'en-US', {
+        weekday:'long', year:'numeric', month:'long', day:'numeric',
+        hour:'2-digit', minute:'2-digit', timeZone:'Asia/Riyadh'
+      });
+    } catch(e){ dateStr = event.date.slice(0,16); }
+  }
+
+  // Badge
+  let badge, bClass;
+  if (event.is_upcoming) { badge = lang==='ar'?'📅 قادم':'📅 Upcoming'; bClass='badge-upcoming'; }
+  else if (event.days_old !== null && event.days_old <= 3) { badge = lang==='ar'?'🔔 حديث':'🔔 Recent'; bClass='badge-recent'; }
+  else { badge = lang==='ar'?'✅ سابق':'✅ Past'; bClass='badge-past'; }
+
+  const summary = event.title.length>160 ? event.title.slice(0,160)+'...' : event.title;
+
+  // Action buttons — always show X link, then optional extras
+  let ab = '';
+  if (event.link) {
+    const xUrl = event.link.replace('nitter.net','x.com');
+    ab += `<a href="${xUrl}" target="_blank" class="link-btn x-btn" style="font-size:12px;padding:6px 12px;">𝕏 ${lang==='ar'?'عرض على X':'View on X'}</a>`;
+  }
+  if (event.meet)
+    ab += `<a href="${event.meet}" target="_blank" class="link-btn meet" style="font-size:12px;padding:6px 12px;">📹 ${lang==='ar'?'انضمي':'Join'}</a>`;
+  if (event.whatsapp)
+    ab += `<a href="${event.whatsapp}" target="_blank" class="link-btn whatsapp" style="font-size:12px;padding:6px 12px;">💬 ${lang==='ar'?'مجتمع البحث':'Research WA'}</a>`;
+  if (event.form)
+    ab += `<a href="${event.form}" target="_blank" class="link-btn form" style="font-size:12px;padding:6px 12px;">📝 ${lang==='ar'?'سجّلي':'Register'}</a>`;
+
+  card.innerHTML = `
+    <span class="event-badge ${bClass}">${badge}</span>
+    ${dateStr?`<div class="event-date">🕐 ${dateStr}</div>`:''}
+    <div class="event-text">${summary}</div>
+    ${ab?`<div class="btn-row">${ab}</div>`:''}
+  `;
+  document.getElementById('messages').appendChild(card);
+  scrollDown();
+}
+
+// ── Typing / scroll ───────────────────────────────────────────────────────────
+function appendTyping() {
+  const d=document.createElement('div');
+  d.className='typing';d.innerHTML='<span></span><span></span><span></span>';
+  document.getElementById('messages').appendChild(d);scrollDown();return d;
+}
+function scrollDown(){const m=document.getElementById('messages');m.scrollTop=m.scrollHeight;}
+function addLabel(t){
+  const d=document.createElement('div');d.className='section-label';d.textContent=t;
+  document.getElementById('messages').appendChild(d);scrollDown();
+}
+
+// ── Send ──────────────────────────────────────────────────────────────────────
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const btn   = document.getElementById('sendBtn');
+  const msg   = input.value.trim();
+  if (!msg) return;
+  const s = document.getElementById('suggestions');
+  if (s) s.style.display='none';
+  appendMessage(msg,'user');
+  playSound(440,0.1);
+  input.value='';btn.disabled=true;
+  const typing=appendTyping();
+  history.push({role:'user',content:msg});
+  try {
+    const res = await fetch(`${API}/chat`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg,language:lang,conversation_history:history.slice(-6)})
+    });
+    const data = await res.json();
+    typing.remove();
+    appendMessage(data.response,'bot');
+    playSound(600,0.15);
+    history.push({role:'assistant',content:data.response});
+
+    if (data.events && data.events.length>0) {
+      const upcoming = data.events.filter(e=>e.is_upcoming);
+      const recent   = data.events.filter(e=>!e.is_upcoming && e.days_old!==null && e.days_old<=3);
+      const past     = data.events.filter(e=>!e.is_upcoming && (e.days_old===null||e.days_old>3));
+      if (upcoming.length>0){
+        addLabel(lang==='ar'?'📅 الفعاليات القادمة':'📅 Upcoming Events');
+        upcoming.forEach(e=>appendEventCard(e));
+      } else if (recent.length>0){
+        addLabel(lang==='ar'?'🔔 منشورات حديثة':'🔔 Recent Posts');
+        recent.slice(0,3).forEach(e=>appendEventCard(e));
+      } else if (past.length>0){
+        addLabel(lang==='ar'?'📌 فعاليات سابقة':'📌 Past Events');
+        past.slice(0,3).forEach(e=>appendEventCard(e));
+      }
+    }
+  } catch(err) {
+    typing.remove();
+    appendMessage(lang==='ar'?'عذراً، في مشكلة بالاتصال.':'Connection error. Make sure the API is running.','bot');
+  }
+  btn.disabled=false;input.focus();
+}
+</script>
+</body>
+</html>
