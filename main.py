@@ -8,6 +8,10 @@ from typing import Optional
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 
+import pandas as pd
+
+
+
 load_dotenv()
 
 app = FastAPI(title="IEEE KAU Chatbot API")
@@ -84,6 +88,16 @@ GREETINGS = ["هلا","اهلا","مرحبا","السلام","هاي","hi","hell
 def is_greeting(t): return any(g in t.lower() for g in GREETINGS) and len(t.strip()) < 20
 
 def get_relevant_events(max_events=5):
+
+    events = load_events_from_sheet()
+
+    upcoming = []
+    for e in events:
+        if str(e.get("is_upcoming")).lower() == "true":
+            upcoming.append(e)
+
+    return upcoming[:max_events]
+
     tweets = load_tweets()
     now = datetime.now(timezone.utc)
     upcoming, recent = [], []
@@ -101,6 +115,7 @@ def get_relevant_events(max_events=5):
     if len(results) < 3:
         results += recent[:max_events - len(results)]
     return results
+
 
 def retrieve_context(query, top_k=3):
     if not chunks or is_greeting(query):
@@ -232,6 +247,20 @@ def chat(req: ChatRequest):
         events=events,
         buttons=buttons
     )
+
+
+SHEET_ID = "149L4tvx8XQ7IUwfbPxGiaRZM6TuUC_zqQ10xvfh30a4"
+
+def load_events_from_sheet():
+    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv"
+    try:
+        df = pd.read_csv(url)
+        events = df.to_dict(orient="records")
+        return events
+    except Exception as e:
+        print("Sheet error:", e)
+        return []
+
 
 @app.get("/health")
 def health():

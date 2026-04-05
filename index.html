@@ -1,3 +1,186 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IEEE KAU Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --c1:#e7eaf9;--c2:#98abe6;--c3:#4d6dd4;--c4:#012dc1;--c5:#0a2184;--c6:#071860;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;font-family:'IBM Plex Sans Arabic','Syne',sans-serif;
+      background:#06091a;display:flex;justify-content:center;align-items:flex-start;
+      position:relative;padding:20px;overflow-y:auto;
+    }
+    .blur{position:absolute;border-radius:50%;filter:blur(160px);z-index:0;pointer-events:none}
+    .blur1{width:520px;height:520px;background:var(--c4);top:-180px;left:-180px;opacity:.2}
+    .blur2{width:520px;height:520px;background:#1a0a5e;bottom:-180px;right:-180px;opacity:.35}
+
+    .phone{
+      width:min(460px,100%);min-height:88vh;border-radius:44px;
+      background:linear-gradient(165deg,#edf0fd 0%,#b8c8ef 50%,#5a78d8 100%);
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow:0 32px 72px rgba(7,24,96,.22),0 0 0 1px rgba(255,255,255,.35) inset;
+      padding:32px 28px 36px;
+      display:flex;flex-direction:column;justify-content:space-between;
+      position:relative;z-index:2;margin:20px auto;
+    }
+    @media(max-width:500px){
+      .phone{border-radius:24px;padding:24px 18px 28px;margin:10px auto;}
+      body{padding:10px;}
+      .title{font-size:22px;}
+      .robot-frame{width:260px;height:170px;}
+    }
+
+    /* TOP BAR */
+    .top-bar{display:flex;justify-content:space-between;align-items:center}
+    .logo{
+      font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
+      color:var(--c6);letter-spacing:-.3px;
+    }
+    .logo span{color:var(--c4)}
+
+    /* language toggle */
+    .lang-toggle{
+      display:flex;align-items:center;gap:2px;
+      background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.6);
+      backdrop-filter:blur(10px);border-radius:20px;padding:4px;cursor:pointer;
+    }
+    .lang-opt{
+      padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;
+      color:var(--c5);transition:all .18s;letter-spacing:.4px;cursor:pointer;border:none;
+      background:transparent;font-family:inherit;
+    }
+    .lang-opt.active{background:var(--c4);color:white;box-shadow:0 2px 8px rgba(1,45,193,.3)}
+
+    /* CENTER */
+    .center{text-align:center;display:flex;flex-direction:column;align-items:center}
+
+    .robot-frame{
+      width:340px;height:220px;border-radius:20px;overflow:hidden;
+      background:linear-gradient(135deg,rgba(255,255,255,.65),rgba(255,255,255,.25));
+      border:1px solid rgba(255,255,255,.7);
+      box-shadow:0 16px 44px rgba(7,24,96,.15),0 0 0 1px rgba(255,255,255,.5) inset;
+      display:flex;align-items:center;justify-content:center;
+      animation:float 4s ease-in-out infinite;margin-bottom:30px;
+    }
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .robot-frame img{width:100%;height:100%;object-fit:contain;border-radius:20px;display:block;background:#071860}
+
+    .eyebrow{
+      font-size:10.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+      color:var(--c4);opacity:.75;margin-bottom:11px;
+    }
+    .title{
+      font-family:'Syne',sans-serif;font-weight:800;
+      font-size:28px;line-height:1.22;color:var(--c6);
+      letter-spacing:-.6px;margin-bottom:11px;
+    }
+    .subtitle{
+      font-size:13px;color:var(--c5);opacity:.68;
+      line-height:1.65;margin-bottom:34px;max-width:260px;
+    }
+
+    .begin-btn{
+      display:inline-flex;align-items:center;gap:11px;
+      padding:15px 36px;border-radius:32px;
+      background:linear-gradient(135deg,var(--c4) 0%,var(--c3) 100%);
+      color:white;text-decoration:none;font-weight:700;font-size:14.5px;
+      letter-spacing:.2px;
+      box-shadow:0 14px 32px rgba(1,45,193,.38),0 0 0 1px rgba(255,255,255,.12) inset;
+      transition:all .22s;font-family:'Syne',sans-serif;
+    }
+    .begin-btn:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(1,45,193,.48)}
+    .begin-btn svg{width:16px;height:16px;transition:transform .22s}
+    .begin-btn:hover svg{transform:translateX(4px)}
+
+    /* DIVIDER */
+    .divider{
+      display:flex;align-items:center;gap:12px;margin-top:22px;width:100%;
+    }
+    .divider-line{flex:1;height:1px;background:rgba(1,45,193,.12)}
+    .divider-text{font-size:10.5px;color:var(--c5);opacity:.55;letter-spacing:.5px;white-space:nowrap}
+  </style>
+</head>
+<body>
+  <div class="blur blur1"></div>
+  <div class="blur blur2"></div>
+  <div class="phone">
+
+    <div class="top-bar">
+      <div class="logo">IEEE <span>KAU</span></div>
+      <div class="lang-toggle" id="landingLang">
+        <button class="lang-opt active" id="opt-en" onclick="setLang('en')">EN</button>
+        <button class="lang-opt" id="opt-ar" onclick="setLang('ar')">AR</button>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="robot-frame">
+        <img src="https://user4563.na.imgto.link/public/20260315/screenshot-2026-03-15-054318.avif"
+             alt="IEEE KAU Assistant"
+             onerror="this.outerHTML='<svg viewBox=\'0 0 80 80\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'><rect x=\'12\' y=\'28\' width=\'56\' height=\'38\' rx=\'10\' fill=\'%23012dc1\' fill-opacity=\'.15\'/><rect x=\'18\' y=\'34\' width=\'44\' height=\'26\' rx=\'7\' fill=\'white\' fill-opacity=\'.8\'/><circle cx=\'30\' cy=\'47\' r=\'5\' fill=\'%23012dc1\'/><circle cx=\'50\' cy=\'47\' r=\'5\' fill=\'%23012dc1\'/><rect x=\'30\' y=\'54\' width=\'20\' height=\'3\' rx=\'1.5\' fill=\'%23012dc1\' fill-opacity=\'.5\'/><rect x=\'36\' y=\'18\' width=\'8\' height=\'10\' rx=\'3\' fill=\'%23012dc1\' fill-opacity=\'.25\'/><circle cx=\'40\' cy=\'13\' r=\'3\' fill=\'%23012dc1\' fill-opacity=\'.3\'/></svg>'"/>
+      </div>
+      <div class="eyebrow" id="landing-eyebrow">IEEE Student Branch — KAU</div>
+      <h1 class="title" id="landing-title">Always On.<br/>Always Smart.</h1>
+      <p class="subtitle" id="landing-sub">Your intelligent club assistant. Ask about events, committees, and how to join.</p>
+      <a href="chat.html" class="begin-btn" id="landing-btn">
+        <span id="landing-btn-text">Begin</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text" id="landing-divider">IEEE KAU Female Section</div>
+        <div class="divider-line"></div>
+      </div>
+    </div>
+
+    <!-- empty div to keep space-between balanced -->
+    <div></div>
+  </div>
+
+<script>
+  let currentLang = 'en';
+  const copy = {
+    en: {
+      eyebrow: 'IEEE Student Branch — KAU',
+      title:   'Always On.<br/>Always Smart.',
+      sub:     'Your intelligent club assistant. Ask about events, committees, and how to join.',
+      btn:     'Begin',
+      divider: 'IEEE KAU Female Section',
+    },
+    ar: {
+      eyebrow: 'الفرع الطلابي لـ IEEE — جامعة الملك عبدالعزيز',
+      title:   'دائماً هنا.<br/>دائماً ذكية.',
+      sub:     'مساعدتك الذكية في نادي IEEE. اسألي عن الفعاليات واللجان وكيفية الانضمام.',
+      btn:     'ابدأي',
+      divider: 'قسم الطالبات — كلية الحاسبات وتقنية المعلومات',
+    }
+  };
+
+  function setLang(l) {
+    currentLang = l;
+    const c = copy[l];
+    document.getElementById('landing-eyebrow').textContent = c.eyebrow;
+    document.getElementById('landing-title').innerHTML     = c.title;
+    document.getElementById('landing-sub').textContent     = c.sub;
+    document.getElementById('landing-btn-text').textContent= c.btn;
+    document.getElementById('landing-divider').textContent = c.divider;
+    document.getElementById('opt-en').classList.toggle('active', l==='en');
+    document.getElementById('opt-ar').classList.toggle('active', l==='ar');
+    // pass lang to chat page via URL param
+    document.getElementById('landing-btn').href = `chat.html?lang=${l}`;
+    document.documentElement.dir = l==='ar' ? 'rtl' : 'ltr';
+  }
+</script>
+</body>
+=======
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,4 +362,5 @@
   }
 </script>
 </body>
+>>>>>>> a2fc337702f24494eecc89bec0f0da124bb35d07
 </html>
