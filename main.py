@@ -7,7 +7,10 @@ import os, numpy as np, pickle, requests, json, re
 from typing import Optional
 from dotenv import load_dotenv
 from datetime import datetime, timezone
+
 import pandas as pd
+
+
 
 load_dotenv()
 
@@ -85,6 +88,7 @@ GREETINGS = ["هلا","اهلا","مرحبا","السلام","هاي","hi","hell
 def is_greeting(t): return any(g in t.lower() for g in GREETINGS) and len(t.strip()) < 20
 
 def get_relevant_events(max_events=5):
+
     events = load_events_from_sheet()
 
     upcoming = []
@@ -93,6 +97,25 @@ def get_relevant_events(max_events=5):
             upcoming.append(e)
 
     return upcoming[:max_events]
+
+    tweets = load_tweets()
+    now = datetime.now(timezone.utc)
+    upcoming, recent = [], []
+    for tw in tweets:
+        if tw.get("is_upcoming"):
+            upcoming.append(tw)
+        elif tw.get("date"):
+            try:
+                from email.utils import parsedate_to_datetime
+                dt = parsedate_to_datetime(tw["date_raw"])
+                if (now - dt).days <= 14:
+                    recent.append(tw)
+            except: pass
+    results = upcoming[:max_events]
+    if len(results) < 3:
+        results += recent[:max_events - len(results)]
+    return results
+
 
 def retrieve_context(query, top_k=3):
     if not chunks or is_greeting(query):
@@ -225,6 +248,7 @@ def chat(req: ChatRequest):
         buttons=buttons
     )
 
+
 SHEET_ID = "149L4tvx8XQ7IUwfbPxGiaRZM6TuUC_zqQ10xvfh30a4"
 
 def load_events_from_sheet():
@@ -236,6 +260,7 @@ def load_events_from_sheet():
     except Exception as e:
         print("Sheet error:", e)
         return []
+
 
 @app.get("/health")
 def health():

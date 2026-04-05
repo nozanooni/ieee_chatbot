@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+groq
+python-dotenv
+numpy
+requests
+PyMuPDF
+python-multipart
+httpx
+jina
