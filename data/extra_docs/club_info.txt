@@ -1,16 +1,23 @@
 هيكل النادي والقيادة:
-المشرفة: د. فلوة أبو خضير
-الرئيسة: نوال دفتردار
-نائبة الرئيسة: لمى الشهري
+المشرفة: د. هدى الغامدي
+الرئيسة: جود الحربي
+نائبة الرئيسة: جوري مسودي
 السكرتيرة: ريمان رقوش
-أمينة الصندوق: جود الحربي
-قائدة لجنة الإعلام: ربى كعبي
-قائدة لجنة البرامج: فاطمة تركستاني
-قائدة لجنة الروح المعنوية: رغد صالح
+أمينة الصندوق: شجون البيشي
 
-للتواصل: kau.ieee.sb@gmail.com
-تويتر وإنستقرام ولينكد إن: ieee_kau_sb@
-تيليجرام: FCITIEEEECLUB
+قائدة قسم الموارد البشرية: ريم الوقداني
+قائدة قسم الإعلام والتسويق: ريماس الفقيه
+قائدة قسم العلاقات العامة: شجون البيشي
+قائدة قسم التقنية: رانيا المطيري
+مديرات المشاريع: ابتهال المطيري - ريناس عسيري - جنان المدفع
+قائدة المجتمع البحثي: لميس العلي
+
+
+Club Leadership:
+- Supervisor: Dr. Huda AlGhamdi
+- President: Joud Alharbi 
+- Vice President: Juri Maswadi
+
 
 فوائد الانضمام للنادي:
 اكتساب خبرات عملية في التصميم والتخطيط وإدارة الفعاليات
@@ -18,59 +25,22 @@
 إضافة تجربة العمل في مؤسسة عالمية لسجل الأعمال
 بناء شبكة علاقات مهنية واجتماعية
 
-اللجان:
-لجنة البرامج: تخطط للفعاليات والمسابقات مثل IEEEXtreme وIEEE Day
-لجنة الإعلام: تصميم ومنشورات ووسائل تواصل اجتماعي وتوثيق فعاليات
-لجنة الموقع: بناء وصيانة موقع النادي
-لجنة الترشيحات: فعاليات داخلية وتعزيز روح الفريق
-لجنة التنفيذ والمالية: الحسابات المالية وتنفيذ المهام
-
-كيفية الانضمام للنادي - معلومات مهمة:
-رابط نموذج الانضمام للنادي: https://forms.gle/4zWQzR9ZkZQ2qz7s7
-للانضمام اضغطي على الرابط وأكملي النموذج.
-النادي مفتوح لجميع طالبات كلية الحاسبات وتقنية المعلومات.
-لا يشترط خبرة مسبقة، فقط الشغف والرغبة في التعلم.
-
-
-
-كيفية الانضمام للنادي - معلومات محدثة:
-رابط نموذج الانضمام الرسمي: https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform?pli=1
-للانضمام اضغطي على الرابط أعلاه وأكملي النموذج.
-النادي مفتوح لجميع طالبات كلية الحاسبات وتقنية المعلومات.
-لا يشترط خبرة مسبقة، فقط الشغف والرغبة في التعلم.
-
-معلومات التواصل الكاملة:
-البريد الإلكتروني للتواصل مع النادي: kau.ieee.sb@gmail.com
-حساب X وتويتر: https://x.com/ieee_kau_sb
-حساب إنستقرام: https://instagram.com/ieee_kau_sb
-حساب لينكد إن: https://linkedin.com/company/ieee_kau_sb
-قناة تيليجرام: FCITIEEEECLUB
 
 
 # Add this to your club_info.txt — it fixes the form link and contact info
 
-كيفية الانضمام للنادي - معلومات محدثة:
-رابط نموذج الانضمام الرسمي: https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform
-للانضمام اضغطي على الرابط أعلاه وأكملي النموذج.
-النادي مفتوح لجميع طالبات كلية الحاسبات وتقنية المعلومات.
-لا يشترط خبرة مسبقة، فقط الشغف والرغبة في التعلم.
-
-معلومات التواصل الكاملة:
+حسابات التواصل الاجتماعي الرسمية للنادي:
 البريد الإلكتروني للتواصل مع النادي: kau.ieee.sb@gmail.com
 حساب X وتويتر: https://x.com/ieee_kau_sb
-حساب إنستقرام: https://instagram.com/ieee_kau_sb
-حساب لينكد إن: https://linkedin.com/company/ieee_kau_sb
-قناة تيليجرام: FCITIEEEECLUB
+حساب لينكد إن: https://www.linkedin.com/in/ieee-kau-sb-female-902947288?utm_source=share_via&utm_content=profile&utm_medium=member_ios
+
+لمتابعة مشاريع واعمال IEEE:
+رابط الانضمام لمجتمع IEEE على الواتساب: https://chat.whatsapp.com/GKG7i7OLUiVEnxvPRKOZdB?mode=gi_t
+
+
 
 # ADD THIS BLOCK to the bottom of data/extra_docs/club_info.txt
 
-حسابات التواصل الاجتماعي الرسمية للنادي:
-- حساب X (تويتر): https://x.com/ieee_kau_sb
-- حساب إنستقرام: https://instagram.com/ieee_kau_sb  
-- حساب لينكد إن: https://linkedin.com/company/ieee-kau-sb
-- قناة تيليجرام: https://t.me/FCITIEEEECLUB
-- البريد الإلكتروني: kau.ieee.sb@gmail.com
-- نموذج الانضمام: https://docs.google.com/forms/d/e/1FAIpQLSc7qI9gJxhBd5TJZJPHBXQmNmRRocxjYDDE-ccPcoLNbKSoLw/viewform
 المهارات المكتسبة من الانضمام للنادي:
 - مهارات التصميم الجرافيكي وصناعة المحتوى
 - مهارات بناء المواقع الإلكترونية والبرمجة
@@ -91,41 +61,23 @@ Skills gained from joining the IEEE club:
 - Building professional and social networks
 - Gaining practical experience in a global organization
 
+
+
 الانضمام للنادي متاح لجميع طالبات جامعة الملك عبدالعزيز وليس فقط كلية الحاسبات.
 The club is open to all female students at King Abdulaziz University, not only Computer Science students.
 
-اللجان والأقسام في النادي:
-- لجنة البرامج: تخطط وتنظم الفعاليات والمسابقات والورش
-- لجنة الإعلام: تصميم ومنشورات ووسائل التواصل الاجتماعي وتوثيق الفعاليات
-- لجنة الموقع: بناء وصيانة الموقع الإلكتروني للنادي
-- لجنة الترشيحات: فعاليات داخلية وتعزيز روح الفريق والترويج لعضوية IEEE
-- لجنة التنفيذ والمالية: إدارة الميزانية وتنفيذ المهام
 
-Committees and departments in the club:
-- Program Committee: plans and organizes events, competitions, and workshops
-- Media Committee: design, social media posts, and event documentation
-- Website Committee: builds and maintains the club website
-- Nominations Committee: internal events, team spirit, and IEEE membership promotion
-- Execution and Finance Committee: budget management and task execution
+Departments:
+- Human Resources Department: Responsible for managing members and organizing internal procedures.
+- Media and Marketing Department: Focuses on the club's visual identity and media communications.
+- Public Relations Department: The club's public face and primarily responsible for the success of the projects.
+- Tech Department: The club's digital brain, ensuring our digital presence.
+- Project Management Department: The department that organizes and monitors project progress to ensure optimal presentation.
 
-Club Leadership:
-- Supervisor: Dr. Falwa Abu Khudair
-- President: Nawal Daftardar  
-- Vice President: Lama Al-Shahri
+الأقسام:
+- قسم الموارد البشرية: مسؤول عن إدارة الأعضاء وتنظيم الإجراءات الداخلية.
+- قسم الإعلام والتسويق: يهتم بالهوية البصرية والتواصل الإعلامي للنادي.
+- قسم العلاقات العامة: الواجهة الخارجية للنادي والمسؤول الأول لنجاح مشاريع النادي.
+- قسم التقنية: العقل الرقمي للنادي ويضمن الحضور الرقمي في الساحة.
+- قسم إدارة المشاريع: القسم المنظم والمراقب لسير عمل المشاريع لضمان عرضها بأبهى صورة.
 
-Committees:
-- Program Committee: plans and organizes events, competitions, workshops, and IEEE special events like IEEEXtreme and IEEE Day
-- Publicity Committee: handles marketing, social media, content creation, and graphic design
-- Executive and Financial Committee: manages budget, financial accounts, and task execution
-- Operating Committee: oversees internal operations and membership
-
-قيادة النادي:
-- المشرفة: د. فلوة أبو خضير
-- الرئيسة: نوال دفتردار
-- نائبة الرئيسة: لمى الشهري
-
-اللجان:
-- لجنة البرامج: تخطط وتنظم الفعاليات والمسابقات وورش العمل
-- لجنة الإعلام والنشر: تتولى التسويق ووسائل التواصل الاجتماعي والتصميم
-- لجنة التنفيذ والمالية: تدير الميزانية والحسابات المالية وتنفيذ المهام
-- اللجنة التشغيلية: تشرف على العمليات الداخلية وشؤون العضوية
